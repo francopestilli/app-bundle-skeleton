@@ -1,5 +1,54 @@
 # Bundle Skeleton Computation (app-bundle-skeleton)
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Computes the skeleton (backbone or centreline) of a white matter bundle from a .tck file with a DIPY-based tool and outputs it as a .tck.**
+
+Runs bundle_skeleton.py: selects the core streamlines of the bundle, resamples them to N_points and averages them into one representative backbone, or optionally returns the streamline closest to it. Use it to get a single centreline for tract profiling or visualisation. Needs a single bundle and a reference T1w image in the same space.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/track/tck` · `neuro/anat/t1w` |
+| 📤 **Outputs** | `neuro/track/tck` |
+| 🐳 **Container** | `gamorosino/tract_align:latest` |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.915](https://doi.org/10.25663/brainlife.app.915) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `track` | `neuro/track/tck` | yes | Single white matter bundle (.tck). |
+| `t1` | `neuro/anat/t1w` | yes | Reference T1-weighted image in the same space as the bundle. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `track` | `neuro/track/tck` | Bundle skeleton (or representative streamline) as track.tck. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (9)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `perc` | number | `0.75` | Core streamline percentile used to select the bundle core (0 disables). |
+| `length_thr` | number | `0.75` | Keep streamlines longer than length_thr times the maximum length. |
+| `smooth_density` | boolean | `false` | Enable density smoothing in core selection. |
+| `N_points` | number | `100` | Number of points used to resample each streamline. |
+| `keep_endpoints` | boolean | `false` | Use endpoint_mode for endpoints and preserve them through smoothing. |
+| `average_type` | enum | `mean` | Aggregation method for interior points (mean or median). Options: `mean`, `median`. |
+| `endpoint_mode` | enum | `median` | Endpoint aggregation method when keep_endpoints is enabled. Options: `median`, `mean`, `median_project`. |
+| `representative` | boolean | `false` | Output the streamline closest to the backbone instead of the backbone. |
+| `spline_smooth` | boolean | `false` | Apply spline smoothing to the backbone. |
+
+</details>
+
+📚 **References used by this App:**
+- Amorosino G, Olivetti E, Jovicich J, Avesani P. How Does White Matter Registration Affect Tractography Alignment? IEEE ISBI (2023). [doi:10.1109/ISBI53787.2023.10230615](https://doi.org/10.1109/ISBI53787.2023.10230615)
+- Garyfallidis E, et al. Dipy, a library for the analysis of diffusion MRI data. Front Neuroinform 8:8 (2014). [doi:10.3389/fninf.2014.00008](https://doi.org/10.3389/fninf.2014.00008)
+
+<!-- brainlife-app:end -->
+
 `app-bundle-skeleton` computes a streamline bundle skeleton (also referred to as backbone or centreline) from a tractography bundle using `bundle_skeleton.py` (based on `tracklib.get_bundle_backbone`). 
 
 Repository contents:
